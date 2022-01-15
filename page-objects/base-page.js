@@ -10,12 +10,20 @@ class BasePage {
     }
 
     async goToUrl(url) {
-        await driver.get(url);
+        try {
+            await driver.get(url);           
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     async quit() {
-        await driver.close();
-        await driver.quit();
+        try {
+            await driver.close();
+            await driver.quit();           
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 
