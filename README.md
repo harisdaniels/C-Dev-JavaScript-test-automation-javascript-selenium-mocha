@@ -40,31 +40,50 @@ Before start development and running the test you need to install packages that 
 - Use `after` hooks to run once after the last test in this block
 
 ```
+require('chromedriver');
+const {By} = require('selenium-webdriver');
+const assert = require('chai').assert;
+const loginPage = require('../page-objects/login-page.js');
+
+
+const url = 'https://admin-demo.nopcommerce.com/'
 describe("As an admin, i want to try to do login", function() {
     this.timeout(50000);
 
     before(async function(){
-        await loginPage.goToUrl(url);
+        try {
+            await loginPage.goToUrl(url);
+        } catch (error) {
+            console.log(error);
+        }
     });
 
     after(async function() {
-        await loginPage.quit();
+        try {
+            await loginPage.quit();          
+        } catch (error) {
+            console.log(error);
+        }
     });
 
     it("I should be able to do login and do logout", async function() {
-        await loginPage.clearEmailField();
-        await loginPage.inputEmailField("admin@yourstore.com");
-        await loginPage.clearPasswordField();
-        await loginPage.inputPasswordField("admin");
-        await loginPage.enterLogin();
-
-        const homePageTitle = await driver.getTitle()
-        assert.equal(homePageTitle, "Dashboard / nopCommerce administration");
-        
-        await loginPage.logout();
-
-        const loginPageTitle = await driver.getTitle()
-        assert.equal(loginPageTitle, "Your store. Login");
+        try {
+            await loginPage.clearEmailField();
+            await loginPage.inputEmailField("admin@yourstore.com");
+            await loginPage.clearPasswordField();
+            await loginPage.inputPasswordField("admin");
+            await loginPage.enterLogin();
+    
+            const homePageTitle = await driver.getTitle()
+            assert.equal(homePageTitle, "Dashboard / nopCommerce administration");
+            
+            await loginPage.logout();
+    
+            const loginPageTitle = await driver.getTitle()
+            assert.equal(loginPageTitle, "Your store. Login");           
+        } catch (error) {
+            console.log(error);
+        }
     });
 });
 ```
